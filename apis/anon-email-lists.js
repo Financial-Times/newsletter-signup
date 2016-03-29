@@ -24,13 +24,18 @@ export default class AnonEmailApi {
 		logger.info(`anon-email-api subscribing ${email} to ${mailingList} via ${url}`);
 
 		return fetch(url, opts).then(response => {
+
 			logger.info(`anon-email-api response ${response.status}`);
 
-			if (response.status !== 204) {
-				throw new Error('response from anon email api was not a HTTP 204');
+			if (response.status === 304) {
+				return Promise.resolve(304);
 			}
 
-			return response.text()
+			if (response.status !== 204) {
+				throw new Error(`response from anon email api was not a HTTP 204 (got ${response.status})`);
+			}
+
+			return Promise.resolve(200);
 		});
 	}
 };

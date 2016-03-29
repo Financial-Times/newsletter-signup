@@ -24,7 +24,8 @@ export default function (req, res, next) {
 		});
 	}
 
-	function render () {
-		res.redirect(302, '/signup/light-signup-thanks');
+	function render (status) {
+		const destination = (status === 204) ? '/signup/light-signup-thanks' : `/signup/light-signup-failure?reason=${status}`;
+		res.redirect(302, destination);
 	}
 }
