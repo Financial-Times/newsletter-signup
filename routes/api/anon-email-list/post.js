@@ -23,7 +23,7 @@ export default function (req, res, next) {
 		});
 	}
 
-	function render (n) {
-		res.status(200).json(n);
+	function render () {
+		res.redirect(302, '/signup/light-signup-thanks');
 	}
 }
