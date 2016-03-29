@@ -12,7 +12,8 @@ export default class AnonEmailApi {
 		const opts = {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
+				'FT-Api-Key': process.env.ANON_EMAIL_LIST_API_KEY
 			},
 			body: JSON.stringify({
 				'mailingListName': mailingList,
