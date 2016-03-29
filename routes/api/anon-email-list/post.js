@@ -1,12 +1,13 @@
 import AnonEmailList from '../../../apis/anon-email-lists';
 import ApiResult from '../../../libs/api-result';
 import ErrorRenderer from '../../../libs/error-renderer';
+import {logger} from 'ft-next-logger';
 
 export default function (req, res, next) {
 
 	const er = new ErrorRenderer(next);
 
-	console.log(req.body);
+	logger.info(req.body);
 
 	subscribeToMailingList()
 		.then(render)
