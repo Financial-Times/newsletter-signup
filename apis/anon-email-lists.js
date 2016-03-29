@@ -35,7 +35,7 @@ export default class AnonEmailApi {
 				throw new Error(`response from anon email api was not a HTTP 204 (got ${response.status})`);
 			}
 
-			return Promise.resolve(200);
+			return Promise.resolve(response.status);
 		});
 	}
 };
