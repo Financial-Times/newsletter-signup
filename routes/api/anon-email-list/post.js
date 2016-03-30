@@ -12,6 +12,15 @@ export default function (req, res, next) {
 	subscribeToMailingList()
 		.then(render)
 		.catch(error => {
+
+			if (error && error.reason === 'ALREADY_SUBSCRIBED') {
+				return res.redirect(302, '/signup/light-signup/oops?reason=ALREADY_SUBSCRIBED');
+			}
+
+			if (error && error.reason === 'USER_ARCHIVED') {
+				return res.redirect(302, '/signup/light-signup/oops?reason=USER_ARCHIVED');
+			}
+
 			next(new Error(error));
 		});
 
@@ -24,8 +33,7 @@ export default function (req, res, next) {
 		});
 	}
 
-	function render (status) {
-		const destination = (status === 204) ? '/signup/light-signup-thanks' : `/signup/light-signup-failure?reason=${status}`;
-		res.redirect(302, destination);
+	function render (response) {
+		res.redirect(302, '/signup/light-signup/thanks');
 	}
 }
