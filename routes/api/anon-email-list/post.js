@@ -9,7 +9,8 @@ export default function (req, res, next) {
 
 	logger.info(req.body);
 
-	subscribeToMailingList()
+	validateEmailAddress()
+		.then(subscribeToMailingList)
 		.then(render)
 		.catch(error => {
 
@@ -21,8 +22,26 @@ export default function (req, res, next) {
 				return res.redirect(302, '/signup/light-signup/oops?reason=USER_ARCHIVED');
 			}
 
+			if (error && error.reason === 'INVALID_EMAIL') {
+				return res.redirect(302, '/signup/light-signup/oops?reason=INVALID_EMAIL');
+			}
+
 			next(new Error(error));
 		});
+
+	function validateEmailAddress () {
+		return new Promise(function(resolve, reject) {
+			if (req.body && req.body.email) {
+
+				if (/(.+)@(.+)/.test(req.body.email)) {
+					resolve({});
+				} else {
+					reject({ reason: 'INVALID_EMAIL' });
+				}
+
+			}
+		});
+	}
 
 	function subscribeToMailingList () {
 		return AnonEmailList.subscribe({
