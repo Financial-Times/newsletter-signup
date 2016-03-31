@@ -1,11 +1,9 @@
 
 import {logger} from 'ft-next-logger';
 
-const mailingList = 'most-popular';
-
 export default class AnonEmailApi {
 
-	static subscribe ({email}={}) {
+	static subscribe ({email, mailingList}={}) {
 
 		const url = `https://anon-email-lists-eu-test.herokuapp.com/mailingList/subscribe`;
 

@@ -1,16 +1,20 @@
 import AnonEmailList from '../../../apis/anon-email-lists';
 import ApiResult from '../../../libs/api-result';
 import ErrorRenderer from '../../../libs/error-renderer';
+import SpoorApi from '../../../apis/spoor';
 import {logger} from 'ft-next-logger';
 
 export default function (req, res, next) {
 
 	const er = new ErrorRenderer(next);
+	const mailingList = 'most-popular';
+	const spoor = new SpoorApi({req});
 
 	logger.info(req.body);
 
 	validateEmailAddress()
 		.then(subscribeToMailingList)
+		.then(silentlySubmitTrackingEvent)
 		.then(render)
 		.catch(error => {
 
@@ -43,9 +47,20 @@ export default function (req, res, next) {
 		});
 	}
 
+	function silentlySubmitTrackingEvent () {
+		spoor.submit({
+			category: 'light-signup',
+			action: 'subscribed',
+			context: {
+				list: mailingList
+			}
+		});
+	}
+
 	function subscribeToMailingList () {
 		return AnonEmailList.subscribe({
-			email: req.body.email
+			email: req.body.email,
+			mailingList: mailingList
 		})
 		.catch(error => {
 			return Promise.reject(error);
