@@ -5,7 +5,7 @@ export default class AnonEmailApi {
 
 	static subscribe ({email, mailingList}={}) {
 
-		const url = `https://anon-email-lists-eu-prod.herokuapp.com/mailingList/subscribe`;
+		const url = `https://anon-email-lists-eu-test.herokuapp.com/mailingList/subscribe`;
 
 		const opts = {
 			method: 'POST',

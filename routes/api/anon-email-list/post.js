@@ -7,7 +7,7 @@ import {logger} from 'ft-next-logger';
 export default function (req, res, next) {
 
 	const er = new ErrorRenderer(next);
-	const mailingList = 'most-popular';
+	const mailingList = 'staff-test';
 	const spoor = new SpoorApi({req});
 
 	logger.info(req.body);
