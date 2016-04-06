@@ -18,17 +18,7 @@ export default function (req, res, next) {
 		.then(render)
 		.catch(error => {
 
-			if (error && error.reason === 'ALREADY_SUBSCRIBED') {
-				return res.redirect(302, '/signup/light-signup/oops?reason=ALREADY_SUBSCRIBED');
-			}
-
-			if (error && error.reason === 'USER_ARCHIVED') {
-				return res.redirect(302, '/signup/light-signup/oops?reason=USER_ARCHIVED');
-			}
-
-			if (error && error.reason === 'INVALID_EMAIL') {
-				return res.redirect(302, '/signup/light-signup/oops?reason=INVALID_EMAIL');
-			}
+			if (error.reason) return res.status(400).send(error.reason);
 
 			next(new Error(error));
 		});
@@ -43,6 +33,8 @@ export default function (req, res, next) {
 					reject({ reason: 'INVALID_EMAIL' });
 				}
 
+			} else {
+				reject({reason: 'INVALID_REQUEST'});
 			}
 		});
 	}
@@ -68,6 +60,6 @@ export default function (req, res, next) {
 	}
 
 	function render (response) {
-		res.redirect(302, '/signup/light-signup/thanks');
+		res.status(200).send('SUBSCRIPTION_SUCCESSFUL');
 	}
 }
