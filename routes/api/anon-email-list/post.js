@@ -1,4 +1,5 @@
 import AnonEmailList from '../../../apis/anon-email-lists';
+import AnonEmailSvc from '../../../apis/anon-email-svc';
 import ApiResult from '../../../libs/api-result';
 import ErrorRenderer from '../../../libs/error-renderer';
 import SpoorApi from '../../../apis/spoor';
@@ -15,11 +16,10 @@ export default function (req, res, next) {
 	validateEmailAddress()
 		.then(subscribeToMailingList)
 		.then(silentlySubmitTrackingEvent)
+		.then(sendEmail)
 		.then(render)
 		.catch(error => {
-
 			if (error.reason) return res.status(400).send(error.reason);
-
 			next(new Error(error));
 		});
 
@@ -40,6 +40,7 @@ export default function (req, res, next) {
 	}
 
 	function silentlySubmitTrackingEvent () {
+		// need to add an anon-user id to this?
 		spoor.submit({
 			category: 'light-signup',
 			action: 'subscribed',
@@ -58,6 +59,12 @@ export default function (req, res, next) {
 			return Promise.reject(error);
 		});
 	}
+
+	function sendEmail() {
+		AnonEmailSvc.send(req.body.email);
+		return Promise.resolve(); // because we don't want to wait for the response from this
+	}
+
 
 	function render (response) {
 		res.status(200).send('SUBSCRIPTION_SUCCESSFUL');
