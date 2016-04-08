@@ -4,6 +4,7 @@ function send(email) {
 	const url = 'https://anon-email-svc-gw-eu-west-1-test.memb.ft.com/send';
 
 	fetch(url, {
+		method: 'POST',
 		headers: {
 			'Content-type': 'application/json',
 			'x-api-key': apiKey
