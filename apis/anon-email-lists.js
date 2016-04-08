@@ -1,5 +1,4 @@
-
-import {logger} from 'ft-next-logger';
+import logger from '@financial-times/n-logger';
 
 export default class AnonEmailApi {
 
