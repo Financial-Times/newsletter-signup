@@ -41,10 +41,10 @@ export default class AnonEmailApi {
 				logger.info(`anon-email-api response body ${JSON.stringify(data)}`);
 
 				if (status !== 204) {
-					return Promise.reject(data)
+					return Promise.reject(data);
 				}
 
 				return {};
-			})
+			});
 	}
 };
