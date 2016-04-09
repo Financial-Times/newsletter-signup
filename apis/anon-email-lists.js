@@ -1,4 +1,3 @@
-
 import {logger} from 'ft-next-logger';
 
 export default class AnonEmailApi {
@@ -46,6 +45,19 @@ export default class AnonEmailApi {
 				}
 
 				return {};
-			})
+			});
 	}
+
+    static unsubscribe (user) {
+
+		const url = `http://anon-email-lists-eu-test.herokuapp.com/user/${user}/unsubscribe`;
+
+		return fetch(url, {
+			method: 'POST',
+			headers: {
+				'Content-type': 'application/json',
+				'FT-Api-key': process.env.ANON_EMAIL_LIST_API_KEY;
+			}
+		});
+    };
 };
