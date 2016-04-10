@@ -2,15 +2,21 @@ import AnonEmailList from '../../../apis/anon-email-lists';
 
 export default function (req, res) {
 
-    AnonEmailList.unsubscribe(req.params.user)
-	    .then(response => {
+	AnonEmailList.unsubscribe(req.params.user)
+		.then(response => {
 
-		    // TODO: handle status codes 403 (user already susbscribed) and 404 (something went wrong, subscription failed)
+			// TODO: make a call to a service which converts lightSignupID to email.
+			const dummyEmail = 'name.name@server.com';
 
-		    res.render('light-signup-unsubscribe', {
-			    layout: 'wrapper',
-			    userEmail: 'name.name@server.com'
-		    });
-	    });
+			const opts = {
+				layout: 'wrapper',
+				userEmail: dummyEmail
+			};
+
+			if (response.status === 204) res.render('light-signup-unsubscribe-success', opts);
+			if (response.status === 403) res.render('light-signup-already-unsubscribed', opts);
+			res.render('light-signup-unsubscribe-failure', opts);
+
+		});
 
 }
