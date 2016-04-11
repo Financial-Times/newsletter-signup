@@ -52,12 +52,22 @@ export default class AnonEmailApi {
 
 		const url = `http://anon-email-lists-eu-test.herokuapp.com/user/${user}/unsubscribe`;
 
-		return fetch(url, {
+        const opts = {
 			method: 'POST',
 			headers: {
 				'Content-type': 'application/json',
-				'FT-Api-key': process.env.ANON_EMAIL_LIST_API_KEY;
-			}
-		});
+				'FT-Api-key': process.env.ANON_EMAIL_LIST_API_KEY
+            }
+		};
+
+        logger.info(`anon-email-api unsubscribing ${user} via ${url}`);
+
+		return fetch(url, opts)
+            .then(response => {
+
+                logger.info(`anon-email-api unsubscribe endpoint response ${response.status}`);
+
+                return response;
+            })
+
     };
-};
