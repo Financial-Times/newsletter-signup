@@ -40,8 +40,10 @@ export default function (req, res, next) {
 	}
 
 	function silentlySubmitTrackingEvent () {
-		// need to add an anon-user id to this?
 		spoor.submit({
+            user: {
+                lightSignupID: 'testing1212'
+            },
 			category: 'light-signup',
 			action: 'subscribed',
 			context: {
