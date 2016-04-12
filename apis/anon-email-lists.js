@@ -46,7 +46,7 @@ export default class AnonEmailApi {
 
 				return {};
 			});
-	}
+	};
 
     static unsubscribe (user) {
 
@@ -62,12 +62,7 @@ export default class AnonEmailApi {
 
         logger.info(`anon-email-api unsubscribing ${user} via ${url}`);
 
-		return fetch(url, opts)
-            .then(response => {
-
-                logger.info(`anon-email-api unsubscribe endpoint response ${response.status}`);
-
-                return response;
-            })
+		return fetch(url, opts);
 
     };
+}
