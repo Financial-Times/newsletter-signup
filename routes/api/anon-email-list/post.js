@@ -41,13 +41,11 @@ export default function (req, res, next) {
 
 	function silentlySubmitTrackingEvent () {
 		spoor.submit({
-            user: {
-                lightSignupID: 'testing1212'
-            },
 			category: 'light-signup',
 			action: 'subscribed',
 			context: {
-				list: mailingList
+				list: mailingList,
+				lightSignupID: 'testing1212'
 			}
 		});
 	}
