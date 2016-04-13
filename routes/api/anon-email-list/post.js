@@ -44,8 +44,7 @@ export default function (req, res, next) {
 			category: 'light-signup',
 			action: 'subscribed',
 			context: {
-				list: mailingList,
-				lightSignupID: 'testing1212'
+				list: mailingList
 			}
 		});
 	}
