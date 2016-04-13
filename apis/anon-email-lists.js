@@ -19,7 +19,7 @@ export default class AnonEmailApi {
 			})
 		};
 
-		logger.info(`anon-email-api subscribing ${email} to ${mailingList} via ${url}`);
+		logger.info(`anon-email-api subscribing ${email} (${deviceId}) to ${mailingList} via ${url}`);
 
 		let status;
 
