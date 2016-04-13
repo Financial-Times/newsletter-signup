@@ -1,5 +1,3 @@
-const apiKey = process.env.ANON_EMAIL_SVC_API_KEY;
-
 export default {
 
 	send(email) {
@@ -10,7 +8,7 @@ export default {
 			method: 'POST',
 			headers: {
 				'Content-type': 'application/json',
-				'x-api-key': apiKey
+				'x-api-key': process.env.ANON_EMAIL_SVC_API_KEY
 			},
 			body: JSON.stringify({email: email})
 		});
