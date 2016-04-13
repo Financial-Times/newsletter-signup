@@ -1,8 +1,8 @@
-import {logger} from 'ft-next-logger';
+import logger from '@financial-times/n-logger';
 
 export default class AnonEmailApi {
 
-	static subscribe ({email, mailingList}={}) {
+	static subscribe ({email, mailingList, deviceId}={}) {
 
 		const url = `https://anon-email-lists-eu-prod.herokuapp.com/mailingList/subscribe`;
 
@@ -14,6 +14,7 @@ export default class AnonEmailApi {
 			},
 			body: JSON.stringify({
 				'mailingListName': mailingList,
+				'deviceId': deviceId,
 				'userEmail': email
 			})
 		};
@@ -41,7 +42,7 @@ export default class AnonEmailApi {
 				logger.info(`anon-email-api response body ${JSON.stringify(data)}`);
 
 				if (status !== 204) {
-					return Promise.reject(data)
+					return Promise.reject(data);
 				}
 
 				return {};

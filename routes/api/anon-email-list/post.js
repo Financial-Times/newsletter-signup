@@ -3,11 +3,10 @@ import AnonEmailSvc from '../../../apis/anon-email-svc';
 import ApiResult from '../../../libs/api-result';
 import ErrorRenderer from '../../../libs/error-renderer';
 import SpoorApi from '../../../apis/spoor';
-import {logger} from 'ft-next-logger';
+import logger from '@financial-times/n-logger';
 
 export default function (req, res, next) {
 
-	const er = new ErrorRenderer(next);
 	const mailingList = 'staff-test';
 	const spoor = new SpoorApi({req});
 
@@ -24,7 +23,7 @@ export default function (req, res, next) {
 		});
 
 	function validateEmailAddress () {
-		return new Promise(function(resolve, reject) {
+		return new Promise(function (resolve, reject) {
 			if (req.body && req.body.email) {
 
 				if (/(.+)@(.+)/.test(req.body.email)) {
@@ -49,10 +48,16 @@ export default function (req, res, next) {
 		});
 	}
 
+	function extractDeviceId (cookie) {
+		const id = /spoor-id=([^;]+)/.exec(cookie);
+		return (id) ? id[1] : null;
+	}
+
 	function subscribeToMailingList () {
 		return AnonEmailList.subscribe({
 			email: req.body.email,
-			mailingList: mailingList
+			mailingList: mailingList,
+			deviceId: extractDeviceId(req.get('ft-cookie-original'))
 		})
 		.catch(error => {
 			return Promise.reject(error);
