@@ -54,10 +54,16 @@ export default function (req, res, next) {
 		});
 	}
 
+	function extractDeviceId (cookie) {
+		const id = /spoor-id=([^;]+)/.exec(cookie);
+		return (id) ? id[1] : null;
+	}
+
 	function subscribeToMailingList () {
 		return AnonEmailList.subscribe({
 			email: req.body.email,
-			mailingList: mailingList
+			mailingList: mailingList,
+			deviceId: extractDeviceId(req.get('ft-cookie-original'))
 		})
 		.catch(error => {
 			return Promise.reject(error);

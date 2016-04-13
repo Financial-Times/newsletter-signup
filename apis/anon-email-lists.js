@@ -2,9 +2,9 @@ import logger from '@financial-times/n-logger';
 
 export default class AnonEmailApi {
 
-	static subscribe ({email, mailingList}={}) {
+	static subscribe ({email, mailingList, deviceId}={}) {
 
-		const url = `https://anon-email-lists-eu-test.herokuapp.com/mailingList/subscribe`;
+		const url = `https://anon-email-lists-eu-prod.herokuapp.com/mailingList/subscribe`;
 
 		const opts = {
 			method: 'POST',
@@ -14,6 +14,7 @@ export default class AnonEmailApi {
 			},
 			body: JSON.stringify({
 				'mailingListName': mailingList,
+				'deviceId': deviceId,
 				'userEmail': email
 			})
 		};
