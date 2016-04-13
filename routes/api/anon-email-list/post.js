@@ -67,7 +67,6 @@ export default function (req, res, next) {
 		return Promise.resolve();
 	}
 
-
 	function render (response) {
 		res.status(200).send('SUBSCRIPTION_SUCCESSFUL');
 	}
