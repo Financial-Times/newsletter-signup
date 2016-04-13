@@ -66,7 +66,7 @@ export default function (req, res, next) {
 
 	function sendEmail() {
 		AnonEmailSvc.send(req.body.email);
-		return Promise.resolve(); // because we don't want to wait for the response from this
+		return Promise.resolve();
 	}
 
 

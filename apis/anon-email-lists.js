@@ -49,21 +49,21 @@ export default class AnonEmailApi {
 			});
 	};
 
-    static unsubscribe (user) {
+	static unsubscribe (user) {
 
 		const url = `http://anon-email-lists-eu-prod.herokuapp.com/user/${user}/unsubscribe`;
 
-        const opts = {
+		const opts = {
 			method: 'POST',
 			headers: {
 				'Content-type': 'application/json',
 				'FT-Api-key': process.env.ANON_EMAIL_LIST_API_KEY
-            }
+			}
 		};
 
-        logger.info(`anon-email-api unsubscribing ${user} via ${url}`);
+		logger.info(`anon-email-api unsubscribing ${user} via ${url}`);
 
 		return fetch(url, opts);
 
-    };
+	};
 }

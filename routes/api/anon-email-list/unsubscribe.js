@@ -5,7 +5,6 @@ export default function (req, res) {
 	AnonEmailList.unsubscribe(req.params.user)
 		.then(response => {
 
-			// TODO: make a call to a service which converts lightSignupID to email.
 			const dummyEmail = 'name.name@server.com';
 
 			const opts = {
