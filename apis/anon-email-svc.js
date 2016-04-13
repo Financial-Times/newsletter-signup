@@ -1,7 +1,7 @@
 const apiKey = process.env.ANON_EMAIL_SVC_API_KEY;
 
 function send(email) {
-	const url = 'https://anon-email-svc-gw-eu-west-1-test.memb.ft.com/send';
+	const url = 'https://anon-email-svc-gw-eu-west-1-prod.memb.ft.com/send';
 
 	fetch(url, {
 		method: 'POST',
