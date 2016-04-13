@@ -1,7 +1,5 @@
 import AnonEmailList from '../../../apis/anon-email-lists';
 import AnonEmailSvc from '../../../apis/anon-email-svc';
-import ApiResult from '../../../libs/api-result';
-import ErrorRenderer from '../../../libs/error-renderer';
 import SpoorApi from '../../../apis/spoor';
 import logger from '@financial-times/n-logger';
 
