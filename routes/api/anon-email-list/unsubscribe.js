@@ -5,11 +5,8 @@ export default function (req, res) {
 	AnonEmailList.unsubscribe(req.params.user)
 		.then(response => {
 
-			const dummyEmail = 'name.name@server.com';
-
 			const opts = {
-				layout: 'wrapper',
-				userEmail: dummyEmail
+				layout: 'wrapper'
 			};
 
 			if (response.status === 204) res.render('light-signup-unsubscribe-success', opts);
