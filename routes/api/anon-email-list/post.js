@@ -13,7 +13,7 @@ export default function (req, res, next) {
 	validateEmailAddress()
 		.then(subscribeToMailingList)
 		.then(silentlySubmitTrackingEvent)
-		.then(sendEmail)
+		.then(sendEmailAfter5am)
 		.then(render)
 		.catch(error => {
 			if (error.reason) return res.status(400).send(error.reason);
@@ -62,8 +62,9 @@ export default function (req, res, next) {
 		});
 	}
 
-	function sendEmail() {
-		AnonEmailSvc.send(req.body.email);
+	function sendEmailAfter5am() {
+		const hourNow = new Date().getHours();
+		if (hourNow > 5) AnonEmailSvc.send(req.body.email);
 		return Promise.resolve();
 	}
 
