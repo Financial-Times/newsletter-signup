@@ -63,8 +63,8 @@ export default function (req, res, next) {
 	}
 
 	function sendEmailAfter5am() {
-		const UTCHourNow = new Date().getUTCHours();
-		if (UTCHourNow > 5) AnonEmailSvc.send(req.body.email);
+		const hourNow = new Date().getHours();
+		if (hourNow > 5) AnonEmailSvc.send(req.body.email);
 		return Promise.resolve();
 	}
 
