@@ -16,7 +16,7 @@ export default function (req, res, next) {
 		.then(sendEmailAfter5am)
 		.then(render)
 		.catch(error => {
-			if (error.reason) return res.status(400).send(error.reason);
+			if (error.reason) return res.status(200).send(error.reason);
 			next(new Error(error));
 		});
 
