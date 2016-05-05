@@ -12,7 +12,7 @@ handlebars(app, {
 	directory: path.resolve(__dirname, '..'),
 });
 
-app.post('/', urlencoded(), post);
+app.post('/', urlencoded({extended: false}), post);
 app.get('/unsubscribe/:user', unsubscribe);
 
 export default app;
