@@ -2,6 +2,7 @@
   "name": "@financial-times/newsletter-signup",
   "version": "1.0.0",
   "main": "lib/index.js",
+  "files": ["package.json", "lib", "views"],
   "scripts": {
     "test": "make test"
   },
