@@ -1,9 +1,8 @@
 import logger from '@financial-times/n-logger';
+import fetch from 'node-fetch';
 
 export default class AnonEmailApi {
-
 	static subscribe ({email, mailingList, deviceId}={}) {
-
 		const url = `https://anon-email-lists-eu-prod.herokuapp.com/mailingList/subscribe`;
 
 		const opts = {
@@ -25,20 +24,16 @@ export default class AnonEmailApi {
 
 		return fetch(url, opts)
 			.then(response => {
-
 				status = response.status;
 
 				logger.info(`anon-email-api response ${status}`);
-
 				if (status === 403) {
 					return response.json();
 				} else {
 					return Promise.resolve({});
 				}
-
 			})
 			.then(data => {
-
 				logger.info(`anon-email-api response body ${JSON.stringify(data)}`);
 
 				if (status !== 204) {
@@ -50,7 +45,6 @@ export default class AnonEmailApi {
 	};
 
 	static unsubscribe (user) {
-
 		const url = `https://anon-email-lists-eu-prod.herokuapp.com/user/${user}/unsubscribe`;
 
 		const opts = {
@@ -64,6 +58,5 @@ export default class AnonEmailApi {
 		logger.info(`anon-email-api unsubscribing ${user} via ${url}`);
 
 		return fetch(url, opts);
-
 	};
 }

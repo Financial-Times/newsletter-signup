@@ -1,5 +1,5 @@
-import AnonEmailList from '../../../apis/anon-email-lists';
-import AnonEmailSvc from '../../../apis/anon-email-svc';
+import AnonEmailList from '../api/anon-email-lists';
+import AnonEmailSvc from '../api/anon-email-svc';
 import SpoorClient from '@financial-times/n-spoor-client';
 import logger from '@financial-times/n-logger';
 

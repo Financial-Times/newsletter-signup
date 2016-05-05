@@ -1,15 +1,16 @@
 import post from './routes/post';
-import unsubscribe from './routes/subscribe';
-import express from '@financial-times/n-express';
+import unsubscribe from './routes/unsubscribe';
+import express from 'express';
+import handlebars from '@financial-times/n-handlebars';
 import {urlencoded} from 'body-parser';
 import path from 'path';
 
-const app = express({
-	withHandlebars: true
+const app = express();
+handlebars(app, {
+	// using the module directory instead of cwd
+	// allows this subapp to use its own templates
+	directory: path.resolve(__dirname, '..'),
 });
-
-// allow this subapp to use its own templates
-app.set('views', path.resolve(__dirname, '../views'));
 
 app.post('/', urlencoded(), post);
 app.get('/unsubscribe/:user', unsubscribe);

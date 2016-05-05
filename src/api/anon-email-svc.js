@@ -1,9 +1,8 @@
+import fetch from 'node-fetch';
+
 export default {
-
 	send(email) {
-
 		const url = 'https://anon-email-svc-gw-eu-west-1-prod.memb.ft.com/send';
-
 		fetch(url, {
 			method: 'POST',
 			headers: {
@@ -12,7 +11,5 @@ export default {
 			},
 			body: JSON.stringify({email: email})
 		});
-
 	}
-
 };
