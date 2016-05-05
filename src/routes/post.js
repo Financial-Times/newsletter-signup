@@ -1,12 +1,16 @@
 import AnonEmailList from '../../../apis/anon-email-lists';
 import AnonEmailSvc from '../../../apis/anon-email-svc';
-import SpoorApi from '../../../apis/spoor';
+import SpoorClient from '@financial-times/n-spoor-client';
 import logger from '@financial-times/n-logger';
 
 export default function (req, res, next) {
 
 	const mailingList = 'staff-test';
-	const spoor = new SpoorApi({req});
+	const spoor = new SpoorClient({
+		source: 'next-signup',
+		category: 'light-signup',
+		req,
+	});
 
 	logger.info(req.body);
 
@@ -38,7 +42,6 @@ export default function (req, res, next) {
 
 	function silentlySubmitTrackingEvent () {
 		spoor.submit({
-			category: 'light-signup',
 			action: 'subscribed',
 			context: {
 				list: mailingList
