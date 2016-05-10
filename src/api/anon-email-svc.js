@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 
 export default {
 	send(email) {
-		const url = 'https://anon-email-svc-gw-eu-west-1-prod.memb.ft.com/send';
+		const url = process.env.ANON_EMAIL_SVC_HOST || 'https://anon-email-svc-gw-eu-west-1-prod.memb.ft.com/send';
 		fetch(url, {
 			method: 'POST',
 			headers: {

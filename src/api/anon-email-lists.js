@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 
 export default class AnonEmailApi {
 	static subscribe ({email, mailingList, deviceId}={}) {
-		const url = `https://anon-email-lists-eu-prod.herokuapp.com/mailingList/subscribe`;
+		const url = process.env.ANON_EMAIL_LIST_HOST || `https://anon-email-lists-eu-prod.herokuapp.com/mailingList/subscribe`;
 
 		const opts = {
 			method: 'POST',
