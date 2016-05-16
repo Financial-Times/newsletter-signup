@@ -1,27 +1,19 @@
 import AnonEmailList from '../api/anon-email-lists';
 
-export default function (req, res) {
+export default function (req, res, next) {
 	AnonEmailList.unsubscribe(req.params.user)
 		.then(response => {
-			if (response.status === 204) {
-				res.render('light-signup-unsubscribe', {
-					layout: 'wrapper',
-					success: true
-				});
+			switch(response.status) {
+				case 204:
+					res.locals.success = true;
+					break;
+				case 403:
+					res.locals.alreadyUnsubscribed = true;
+					break;
+				default:
+					res.locals.failure = true;
 			}
 
-			if (response.status === 403) {
-				res.render('light-signup-unsubscribe', {
-					layout: 'wrapper',
-					alreadyUnsubscribed: true
-				});
-			}
-
-			if (response.status !== 204 && response.status !== 403) {
-				res.render('light-signup-unsubscribe', {
-					layout: 'wrapper',
-					failure: true
-				});
-			}
-		});
+			next();
+		}, err => next(err));
 }
