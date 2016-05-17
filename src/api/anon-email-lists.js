@@ -1,9 +1,14 @@
 import logger from '@financial-times/n-logger';
 import fetch from 'node-fetch';
+import url from 'url';
 
 export default class AnonEmailApi {
 	static subscribe ({email, mailingList, deviceId}={}) {
-		const url = process.env.ANON_EMAIL_LIST_HOST || `https://anon-email-lists-eu-prod.herokuapp.com/mailingList/subscribe`;
+		const endpoint = url.format({
+			hostname: process.env.ANON_EMAIL_LIST_HOST || 'anon-email-lists-eu-prod.herokuapp.com',
+			protocol: 'https',
+			pathname: '/mailingList/subscribe',
+		});
 
 		const opts = {
 			method: 'POST',
@@ -18,11 +23,11 @@ export default class AnonEmailApi {
 			})
 		};
 
-		logger.info(`anon-email-api subscribing ${email} (${deviceId}) to ${mailingList} via ${url}`);
+		logger.info(`anon-email-api subscribing ${email} (${deviceId}) to ${mailingList} via ${endpoint}`);
 
 		let status;
 
-		return fetch(url, opts)
+		return fetch(endpoint, opts)
 			.then(response => {
 				status = response.status;
 
@@ -45,7 +50,11 @@ export default class AnonEmailApi {
 	};
 
 	static unsubscribe (user) {
-		const url = `https://anon-email-lists-eu-prod.herokuapp.com/user/${user}/unsubscribe`;
+		const endpoint = url.format({
+			hostname: process.env.ANON_EMAIL_LIST_HOST || 'anon-email-lists-eu-prod.herokuapp.com',
+			protocol: 'https',
+			pathname: `//user/${user}/unsubscribe`,
+		});
 
 		const opts = {
 			method: 'POST',
@@ -55,8 +64,8 @@ export default class AnonEmailApi {
 			}
 		};
 
-		logger.info(`anon-email-api unsubscribing ${user} via ${url}`);
+		logger.info(`anon-email-api unsubscribing ${user} via ${endpoint}`);
 
-		return fetch(url, opts);
+		return fetch(endpoint, opts);
 	};
 }
