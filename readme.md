@@ -54,7 +54,7 @@ The variables `success`, `alreadyUnsubscribed` and `failure` are available in `r
 Environment vars
 ----------------
 
-The (self-explanatory) environment variables `ANON_EMAIL_SVC_API_KEY` and `ANON_EMAIL_LIST_API_KEY` are required.
+The (self-explanatory) environment variables `ANON_EMAIL_SVC_API_KEY` and `ANON_EMAIL_LIST_API_KEY` are required. There's also the optional variables `ANON_EMAIL_SVC_HOST` and `ANON_EMAIL_LIST_HOST` to configure the hostnames to talk to for these services.
 
 ---
 
