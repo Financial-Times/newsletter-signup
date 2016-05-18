@@ -18,9 +18,9 @@ export default function (req, res, next) {
 		.then(subscribeToMailingList)
 		.then(silentlySubmitTrackingEvent)
 		.then(sendEmailAfter5am)
-		.then(render)
+		.then(() => send('SUBSCRIPTION_SUCCESSFUL'))
 		.catch(error => {
-			if (error.reason) return res.status(200).send(error.reason);
+			if (error.reason) return send(error.reason);
 			next(new Error(error));
 		});
 
@@ -71,7 +71,11 @@ export default function (req, res, next) {
 		return Promise.resolve();
 	}
 
-	function render (response) {
-		res.status(200).send('SUBSCRIPTION_SUCCESSFUL');
+	function send(response) {
+		if(req.newsletterSignupPostNoResponse) {
+			res.locals.newsletterSignupStatus = response;
+		} else {
+			res.status(200).send(response);
+		}
 	}
 }
