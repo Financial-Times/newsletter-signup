@@ -74,6 +74,7 @@ export default function (req, res, next) {
 	function send(response) {
 		if(req.newsletterSignupPostNoResponse) {
 			res.locals.newsletterSignupStatus = response;
+			next();
 		} else {
 			res.status(200).send(response);
 		}
