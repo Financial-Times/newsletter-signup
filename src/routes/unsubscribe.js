@@ -1,7 +1,7 @@
-import AnonEmailList from '../api/anon-email-lists';
+import {unsubscribe} from '../api/anon-email-lists';
 
 export default function (req, res, next) {
-	AnonEmailList.unsubscribe(req.params.user)
+	unsubscribe(req.params.user)
 		.then(response => {
 			switch(response.status) {
 				case 204:

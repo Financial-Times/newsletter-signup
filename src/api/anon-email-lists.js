@@ -2,70 +2,60 @@ import logger from '@financial-times/n-logger';
 import fetch from 'node-fetch';
 import url from 'url';
 
-export default class AnonEmailApi {
-	static subscribe ({email, mailingList, deviceId}={}) {
-		const endpoint = url.format({
-			hostname: process.env.ANON_EMAIL_LIST_HOST || 'anon-email-lists-eu-prod.herokuapp.com',
-			protocol: 'https',
-			pathname: '/mailingList/subscribe',
-		});
+const hostname = process.env.ANON_EMAIL_LIST_HOST || 'anon-email-lists-eu-prod.herokuapp.com';
 
-		const opts = {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				'FT-Api-Key': process.env.ANON_EMAIL_LIST_API_KEY
-			},
-			body: JSON.stringify({
-				'mailingListName': mailingList,
-				'deviceId': deviceId,
-				'userEmail': email
-			})
-		};
+export function call(pathname, body, method = 'POST') {
+	const endpoint = url.format({
+		hostname,
+		protocol: 'https',
+		pathname,
+	});
 
-		logger.info(`anon-email-api subscribing ${email} (${deviceId}) to ${mailingList} via ${endpoint}`);
+	logger.info(`calling ${endpoint}`);
 
-		let status;
+	return fetch(endpoint, {
+		method,
+		headers: {
+			'Content-Type': 'application/json',
+			'FT-Api-Key': process.env.ANON_EMAIL_LIST_API_KEY
+		},
+		body: body && JSON.stringify(body),
+	});
+};
 
-		return fetch(endpoint, opts)
-			.then(response => {
-				status = response.status;
+export function subscribe({email, mailingList, deviceId}={}) {
+	logger.info(`anon-email-api subscribing ${email} (${deviceId}) to ${mailingList}`);
 
-				logger.info(`anon-email-api response ${status}`);
-				if (status === 403) {
-					return response.json();
-				} else {
-					return Promise.resolve({});
-				}
-			})
-			.then(data => {
-				logger.info(`anon-email-api response body ${JSON.stringify(data)}`);
+	let status;
 
-				if (status !== 204) {
-					return Promise.reject(data);
-				}
+	return call('/mailingList/subscribe', {
+		'mailingListName': mailingList,
+		'deviceId': deviceId,
+		'userEmail': email
+	})
+	.then(response => {
+		status = response.status;
 
-				return {};
-			});
-	};
+		logger.info(`anon-email-api response ${status}`);
+		if (status === 403) {
+			return response.json();
+		} else {
+			return Promise.resolve({});
+		}
+	})
+	.then(data => {
+		logger.info(`anon-email-api response body ${JSON.stringify(data)}`);
 
-	static unsubscribe (user) {
-		const endpoint = url.format({
-			hostname: process.env.ANON_EMAIL_LIST_HOST || 'anon-email-lists-eu-prod.herokuapp.com',
-			protocol: 'https',
-			pathname: `//user/${user}/unsubscribe`,
-		});
+		if (status !== 204) {
+			return Promise.reject(data);
+		}
 
-		const opts = {
-			method: 'POST',
-			headers: {
-				'Content-type': 'application/json',
-				'FT-Api-key': process.env.ANON_EMAIL_LIST_API_KEY
-			}
-		};
+		return {};
+	});
+};
 
-		logger.info(`anon-email-api unsubscribing ${user} via ${endpoint}`);
+export function unsubscribe(user) {
+	logger.info(`anon-email-api unsubscribing ${user} via ${hostname}/user/${user}/unsubscribe`);
 
-		return fetch(endpoint, opts);
-	};
-}
+	return call(`/user/${user}/unsubscribe`);
+};

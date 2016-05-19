@@ -1,21 +1,27 @@
 import fetch from 'node-fetch';
 import url from 'url';
 
-export default {
-	send(email) {
-		const endpoint = url.format({
-			hostname: process.env.ANON_EMAIL_SVC_HOST || 'anon-email-svc-gw-eu-west-1-prod.memb.ft.com',
-			protocol: 'https',
-			pathname: '/send',
-		});
+const hostname = process.env.ANON_EMAIL_SVC_HOST || 'anon-email-svc-gw-eu-west-1-prod.memb.ft.com';
 
-		fetch(url, {
-			method: 'POST',
-			headers: {
-				'Content-type': 'application/json',
-				'x-api-key': process.env.ANON_EMAIL_SVC_API_KEY
-			},
-			body: JSON.stringify({email: email})
-		});
-	}
+export function call(pathname, opts) {
+	const endpoint = url.format({
+		hostname,
+		protocol: 'https',
+		pathname,
+	});
+
+	logger.info(`calling ${endpoint}`);
+
+	return fetch(endpoint, opts);
+};
+
+export function send(email) {
+	return call('/send', {
+		method: 'POST',
+		headers: {
+			'Content-type': 'application/json',
+			'x-api-key': process.env.ANON_EMAIL_SVC_API_KEY
+		},
+		body: JSON.stringify({email: email})
+	});
 };
