@@ -4,7 +4,7 @@ import url from 'url';
 
 const hostname = process.env.ANON_EMAIL_LIST_HOST || 'anon-email-lists-eu-prod.herokuapp.com';
 
-export function call(pathname, body) {
+export function call(pathname, body, method = 'POST') {
 	const endpoint = url.format({
 		hostname,
 		protocol: 'https',
@@ -14,7 +14,7 @@ export function call(pathname, body) {
 	logger.info(`calling ${endpoint}`);
 
 	return fetch(endpoint, {
-		method: 'POST',
+		method,
 		headers: {
 			'Content-Type': 'application/json',
 			'FT-Api-Key': process.env.ANON_EMAIL_LIST_API_KEY
