@@ -1,4 +1,4 @@
-import AnonEmailList from '../api/anon-email-lists';
+import {subscribe} from '../api/anon-email-lists';
 import AnonEmailSvc from '../api/anon-email-svc';
 import SpoorClient from '@financial-times/n-spoor-client';
 import logger from '@financial-times/n-logger';
@@ -55,7 +55,7 @@ export default function (req, res, next) {
 	}
 
 	function subscribeToMailingList () {
-		return AnonEmailList.subscribe({
+		return subscribe({
 			email: req.body.email,
 			mailingList: mailingList,
 			deviceId: extractDeviceId(req.get('ft-cookie-original'))
