@@ -11,6 +11,8 @@ export function call(pathname, opts) {
 		pathname,
 	});
 
+	logger.info(`calling ${endpoint}`);
+
 	return fetch(endpoint, opts);
 };
 
@@ -28,7 +30,7 @@ export function subscribe({email, mailingList, deviceId}={}) {
 		})
 	};
 
-	logger.info(`anon-email-api subscribing ${email} (${deviceId}) to ${mailingList} via ${hostname}/mailingList/subscribe`);
+	logger.info(`anon-email-api subscribing ${email} (${deviceId}) to ${mailingList}`);
 
 	let status;
 
@@ -67,3 +69,5 @@ export function unsubscribe(user) {
 
 	return call(`/user/${user}/unsubscribe`, opts);
 };
+
+// https://anon-email-lists-eu-test.herokuapp.com/mailingList/subscribe

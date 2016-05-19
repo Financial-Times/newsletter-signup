@@ -10,6 +10,8 @@ export function call(pathname, opts) {
 		pathname,
 	});
 
+	logger.info(`calling ${endpoint}`);
+
 	return fetch(endpoint, opts);
 };
 
