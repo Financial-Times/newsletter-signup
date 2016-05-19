@@ -35,6 +35,8 @@ Endpoints
 
 Subscribe an email address provided by the POST body parameter `email` to the mailing list.
 
+If a middleware sets `req.newsletterSignupPostNoResponse` to a truthy value, this endpoint will not send a response, but instead set `res.locals.newsletterSignupStatus` to the status string, so a product can render a template if it needs regular form submission instead of AJAX.
+
 ### `GET [/middleware/root]/unsubscribe/:user`
 
 Unsubscribe the user id `:user` from the list. By default, this does not send a response, but sets status variables in `res.locals`. Products using this middleware are responsible for rendering a response, by attaching a route to the same path:
