@@ -1,5 +1,5 @@
 import {subscribe} from '../api/anon-email-lists';
-import AnonEmailSvc from '../api/anon-email-svc';
+import {send} from '../api/anon-email-svc';
 import SpoorClient from '@financial-times/n-spoor-client';
 import logger from '@financial-times/n-logger';
 
@@ -67,7 +67,7 @@ export default function (req, res, next) {
 
 	function sendEmailAfter5am() {
 		const hourNow = new Date().getHours();
-		if (hourNow > 5) AnonEmailSvc.send(req.body.email);
+		if (hourNow > 5) send(req.body.email);
 		return Promise.resolve();
 	}
 

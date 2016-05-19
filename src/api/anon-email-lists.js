@@ -4,7 +4,7 @@ import url from 'url';
 
 const hostname = process.env.ANON_EMAIL_LIST_HOST || 'anon-email-lists-eu-prod.herokuapp.com';
 
-export function call(pathname, opts) {
+export function call(pathname, body) {
 	const endpoint = url.format({
 		hostname,
 		protocol: 'https',
@@ -13,28 +13,26 @@ export function call(pathname, opts) {
 
 	logger.info(`calling ${endpoint}`);
 
-	return fetch(endpoint, opts);
-};
-
-export function subscribe({email, mailingList, deviceId}={}) {
-	const opts = {
+	return fetch(endpoint, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
 			'FT-Api-Key': process.env.ANON_EMAIL_LIST_API_KEY
 		},
-		body: JSON.stringify({
-			'mailingListName': mailingList,
-			'deviceId': deviceId,
-			'userEmail': email
-		})
-	};
+		body: body && JSON.stringify(body),
+	});
+};
 
+export function subscribe({email, mailingList, deviceId}={}) {
 	logger.info(`anon-email-api subscribing ${email} (${deviceId}) to ${mailingList}`);
 
 	let status;
 
-	return call('/mailingList/subscribe)', opts)
+	return call('/mailingList/subscribe', {
+		'mailingListName': mailingList,
+		'deviceId': deviceId,
+		'userEmail': email
+	})
 	.then(response => {
 		status = response.status;
 
@@ -57,17 +55,7 @@ export function subscribe({email, mailingList, deviceId}={}) {
 };
 
 export function unsubscribe(user) {
-	const opts = {
-		method: 'POST',
-		headers: {
-			'Content-type': 'application/json',
-			'FT-Api-key': process.env.ANON_EMAIL_LIST_API_KEY
-		}
-	};
+	logger.info(`anon-email-api unsubscribing ${user} via ${hostname}/user/${user}/unsubscribe`);
 
-	logger.info(`anon-email-api unsubscribing ${user} via ${hostname}//user/${user}/unsubscribe`);
-
-	return call(`/user/${user}/unsubscribe`, opts);
+	return call(`/user/${user}/unsubscribe`);
 };
-
-// https://anon-email-lists-eu-test.herokuapp.com/mailingList/subscribe
