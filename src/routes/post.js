@@ -5,7 +5,7 @@ import logger from '@financial-times/n-logger';
 
 export default function (req, res, next) {
 
-	const mailingList = 'staff-test';
+	const mailingList = 'next-article';
 	const spoor = new SpoorClient({
 		source: 'next-signup',
 		category: 'light-signup',
