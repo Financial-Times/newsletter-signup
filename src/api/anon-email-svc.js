@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 import url from 'url';
 
-const hostname = process.env.ANON_EMAIL_SVC_HOST || 'anon-email-svc-gw-eu-west-1-prod.memb.ft.com',
+const hostname = process.env.ANON_EMAIL_SVC_HOST || 'anon-email-svc-gw-eu-west-1-prod.memb.ft.com';
 
 export function call(pathname, opts) {
 	const endpoint = url.format({
