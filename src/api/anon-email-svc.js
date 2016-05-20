@@ -1,5 +1,6 @@
 import fetch from 'node-fetch';
 import url from 'url';
+import logger from '@financial-times/n-logger';
 
 const hostname = process.env.ANON_EMAIL_SVC_HOST || 'anon-email-svc-gw-eu-west-1-prod.memb.ft.com';
 
