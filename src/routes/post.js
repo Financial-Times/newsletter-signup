@@ -5,11 +5,11 @@ import logger from '@financial-times/n-logger';
 
 export default function (req, res, next) {
 
-	const mailingList = 'next-article';
+	const mailingList = req.body && req.body.mailingList ? req.body.mailingList : 'light-signup';
 	const spoor = new SpoorClient({
-		source: 'next-signup',
+		source: req.body && req.body.source ? req.body.source : null,
 		category: 'light-signup',
-		req,
+		req
 	});
 
 	logger.info(req.body);
