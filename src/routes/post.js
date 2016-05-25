@@ -5,16 +5,16 @@ import logger from '@financial-times/n-logger';
 
 export default function (req, res, next) {
 
-	const mailingList = 'next-article';
+	const mailingList = req.body && req.body.mailingList ? req.body.mailingList : 'light-signup';
 	const spoor = new SpoorClient({
-		source: 'next-signup',
+		source: req.body && req.body.source ? req.body.source : null,
 		category: 'light-signup',
-		req,
+		req
 	});
 
 	logger.info(req.body);
 
-	validateEmailAddress()
+	validateRequest()
 		.then(subscribeToMailingList)
 		.then(silentlySubmitTrackingEvent)
 		.then(sendEmailAfter5am)
@@ -24,11 +24,11 @@ export default function (req, res, next) {
 			next(new Error(error));
 		});
 
-	function validateEmailAddress () {
+	function validateRequest () {
 		return new Promise(function (resolve, reject) {
-			if (req.body && req.body.email) {
+			if (req.body && req.body.email && req.body.source) {
 
-				if (/(.+)@(.+)/.test(req.body.email)) {
+				if (validateEmailAddress(req.body.email)) {
 					resolve({});
 				} else {
 					reject({ reason: 'INVALID_EMAIL' });
@@ -38,6 +38,10 @@ export default function (req, res, next) {
 				reject({reason: 'INVALID_REQUEST'});
 			}
 		});
+	}
+
+	function validateEmailAddress (email) {
+		return /(.+)@(.+)/.test(email);
 	}
 
 	function silentlySubmitTrackingEvent () {
