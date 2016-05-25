@@ -14,7 +14,7 @@ export default function (req, res, next) {
 
 	logger.info(req.body);
 
-	validateEmailAddress()
+	validateRequest()
 		.then(subscribeToMailingList)
 		.then(silentlySubmitTrackingEvent)
 		.then(sendEmailAfter5am)
@@ -24,11 +24,11 @@ export default function (req, res, next) {
 			next(new Error(error));
 		});
 
-	function validateEmailAddress () {
+	function validateRequest () {
 		return new Promise(function (resolve, reject) {
-			if (req.body && req.body.email) {
+			if (req.body && req.body.email && req.body.source) {
 
-				if (/(.+)@(.+)/.test(req.body.email)) {
+				if (validateEmailAddress(req.body.email)) {
 					resolve({});
 				} else {
 					reject({ reason: 'INVALID_EMAIL' });
@@ -38,6 +38,10 @@ export default function (req, res, next) {
 				reject({reason: 'INVALID_REQUEST'});
 			}
 		});
+	}
+
+	function validateEmailAddress (email) {
+		return /(.+)@(.+)/.test(email);
 	}
 
 	function silentlySubmitTrackingEvent () {
