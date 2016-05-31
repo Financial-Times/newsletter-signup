@@ -1,6 +1,6 @@
 import {subscribe} from '../api/anon-email-lists';
 import {send} from '../api/anon-email-svc';
-import SpoorClient from '@financial-times/n-spoor-client';
+import SpoorClient from '@financial-times/spoor-client';
 import logger from '@financial-times/n-logger';
 
 export default function (req, res, next) {
