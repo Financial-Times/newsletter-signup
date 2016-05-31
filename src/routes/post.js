@@ -7,8 +7,9 @@ export default function (req, res, next) {
 
 	const mailingList = req.body && req.body.mailingList ? req.body.mailingList : 'light-signup';
 	const spoor = new SpoorClient({
-		source: req.body && req.body.source ? req.body.source : null,
+		source: 'newsletter-signup',
 		category: 'light-signup',
+		product: req.body && req.body.source ? req.body.source : null,
 		req
 	});
 
