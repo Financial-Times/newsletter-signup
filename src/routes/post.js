@@ -31,7 +31,7 @@ export default function (req, res, next) {
 
 	function validateRequest () {
 		return new Promise(function (resolve, reject) {
-			if (req.body && req.body.email && req.body.source) {
+			if (req.body && req.body.email && (req.body.product || req.body.source)) {
 
 				if (validateEmailAddress(req.body.email)) {
 					resolve({});
