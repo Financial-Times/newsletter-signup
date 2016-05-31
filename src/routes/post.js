@@ -1,16 +1,20 @@
 import {subscribe} from '../api/anon-email-lists';
 import {send} from '../api/anon-email-svc';
-import SpoorClient from '@financial-times/n-spoor-client';
+import SpoorClient from '@financial-times/spoor-client';
 import logger from '@financial-times/n-logger';
 
 export default function (req, res, next) {
 
 	const mailingList = req.body && req.body.mailingList ? req.body.mailingList : 'light-signup';
+	const cookies = req.get('cookie') || req.get('ft-cookie-original');
+	const ua = req.get('user-agent');
+
 	const spoor = new SpoorClient({
 		source: 'newsletter-signup',
 		category: 'light-signup',
 		product: req.body && req.body.source ? req.body.source : null,
-		req
+		cookies,
+		ua,
 	});
 
 	logger.info(req.body);
@@ -63,7 +67,7 @@ export default function (req, res, next) {
 		return subscribe({
 			email: req.body.email,
 			mailingList: mailingList,
-			deviceId: extractDeviceId(req.get('ft-cookie-original'))
+			deviceId: extractDeviceId(cookies),
 		})
 		.catch(error => {
 			return Promise.reject(error);
