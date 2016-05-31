@@ -12,7 +12,7 @@ export default function (req, res, next) {
 	const spoor = new SpoorClient({
 		source: 'newsletter-signup',
 		category: 'light-signup',
-		product: req.body && req.body.source ? req.body.source : null,
+		product: req.body && (req.body.product || req.body.source) || null,
 		cookies,
 		ua,
 	});
