@@ -23,15 +23,16 @@ export function call(pathname, body, method = 'POST') {
 	});
 };
 
-export function subscribe({email, mailingList, deviceId}={}) {
-	logger.info(`anon-email-api subscribing ${email} (${deviceId}) to ${mailingList}`);
+export function subscribe({email, mailingList, deviceId, topic}={}) {
+	logger.info(`anon-email-api subscribing ${email} (${deviceId}) to ${mailingList} with topic: ${topic}`);
 
 	let status;
 
 	return call('/mailingList/subscribe', {
 		'mailingListName': mailingList,
 		'deviceId': deviceId,
-		'userEmail': email
+		'userEmail': email,
+		'topic': topic
 	})
 	.then(response => {
 		status = response.status;

@@ -6,6 +6,7 @@ import logger from '@financial-times/n-logger';
 export default function (req, res, next) {
 
 	const mailingList = req.body && req.body.mailingList ? req.body.mailingList : 'light-signup';
+	const topic = req.body && req.body.topic ? req.body.topic : 'default';
 	const cookies = req.get('cookie') || req.get('ft-cookie-original');
 	const ua = req.get('user-agent');
 
@@ -14,7 +15,7 @@ export default function (req, res, next) {
 		category: 'light-signup',
 		product: req.body && (req.body.product || req.body.source) || null,
 		cookies,
-		ua,
+		ua
 	});
 
 	logger.info(req.body);
@@ -53,7 +54,8 @@ export default function (req, res, next) {
 		spoor.submit({
 			action: 'subscribed',
 			context: {
-				list: mailingList
+				list: mailingList,
+				topic: topic
 			}
 		});
 	}
@@ -67,7 +69,8 @@ export default function (req, res, next) {
 		return subscribe({
 			email: req.body.email,
 			mailingList: mailingList,
-			deviceId: extractDeviceId(cookies),
+			topic: topic,
+			deviceId: extractDeviceId(cookies)
 		})
 		.catch(error => {
 			return Promise.reject(error);
