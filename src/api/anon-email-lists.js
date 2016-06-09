@@ -11,8 +11,6 @@ export function call(pathname, body, method = 'POST') {
 		pathname,
 	});
 
-	logger.info(`calling ${endpoint}`);
-
 	return fetch(endpoint, {
 		method,
 		headers: {
@@ -24,7 +22,7 @@ export function call(pathname, body, method = 'POST') {
 };
 
 export function subscribe({email, mailingList, deviceId, topics}={}) {
-	logger.info(`anon-email-api subscribing ${email} (${deviceId}) to ${mailingList} with topics: ${topics}`);
+	logger.info(`anon-email-api about to subscribe user (device ${deviceId}) to ${mailingList} with topics: ${topics}`);
 
 	let status;
 
@@ -50,6 +48,16 @@ export function subscribe({email, mailingList, deviceId, topics}={}) {
 		if (status !== 204) {
 			return Promise.reject(data);
 		}
+
+		// don't wait on this promise, log in the background
+		call(`/user/${email}`, null, 'GET').then(r => r.json().then(json => {
+			if(r.ok) {
+				logger.info(`anon-email-api subscribed user (device ${deviceId}) as ${json.uuid}`)
+			} else {
+				const err = new Error(JSON.stringify(json));
+				err.response = r;
+			}
+		})).catch(e => logger.warn(e));
 
 		return {};
 	});

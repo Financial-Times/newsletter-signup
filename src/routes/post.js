@@ -1,7 +1,6 @@
 import {subscribe} from '../api/anon-email-lists';
 import {send} from '../api/anon-email-svc';
 import SpoorClient from '@financial-times/spoor-client';
-import logger from '@financial-times/n-logger';
 
 export default function (req, res, next) {
 
@@ -17,8 +16,6 @@ export default function (req, res, next) {
 		cookies,
 		ua
 	});
-
-	logger.info(req.body);
 
 	validateRequest()
 		.then(subscribeToMailingList)
