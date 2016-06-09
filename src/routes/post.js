@@ -1,6 +1,7 @@
 import {subscribe} from '../api/anon-email-lists';
 import {send} from '../api/anon-email-svc';
 import SpoorClient from '@financial-times/spoor-client';
+import logger from '@financial-times/n-logger';
 
 export default function (req, res, next) {
 
@@ -8,6 +9,7 @@ export default function (req, res, next) {
 	const topics = req.body && req.body.topics ? req.body.topics : 'default';
 	const cookies = req.get('cookie') || req.get('ft-cookie-original');
 	const ua = req.get('user-agent');
+	const deviceId = extractDeviceId(cookies);
 
 	const spoor = new SpoorClient({
 		source: 'newsletter-signup',
@@ -67,7 +69,7 @@ export default function (req, res, next) {
 			email: req.body.email,
 			mailingList: mailingList,
 			topics: topics,
-			deviceId: extractDeviceId(cookies)
+			deviceId,
 		})
 		.catch(error => {
 			return Promise.reject(error);
@@ -81,6 +83,8 @@ export default function (req, res, next) {
 	}
 
 	function sendStatus(response) {
+		logger.info(`final status for ${deviceId} is ${response}`);
+
 		if(req.newsletterSignupPostNoResponse) {
 			res.locals.newsletterSignupStatus = response;
 			next();
