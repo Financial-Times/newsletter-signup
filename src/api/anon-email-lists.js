@@ -11,8 +11,6 @@ export function call(pathname, body, method = 'POST') {
 		pathname,
 	});
 
-	logger.info(`calling ${endpoint}`);
-
 	return fetch(endpoint, {
 		method,
 		headers: {
@@ -23,8 +21,20 @@ export function call(pathname, body, method = 'POST') {
 	});
 };
 
+function logSubscription({deviceId, email}) {
+	// don't wait on this promise, log in the background
+	call(`/user/${email}`, null, 'GET').then(r => r.json().then(json => {
+		if(r.ok) {
+			logger.info(`anon-email-api subscribed user (device ${deviceId}) as ${json.uuid}`)
+		} else {
+			const err = new Error(JSON.stringify(json));
+			err.response = r;
+		}
+	})).catch(e => logger.warn(e));
+}
+
 export function subscribe({email, mailingList, deviceId, topics}={}) {
-	logger.info(`anon-email-api subscribing ${email} (${deviceId}) to ${mailingList} with topics: ${topics}`);
+	logger.info(`anon-email-api about to subscribe user (device ${deviceId}) to ${mailingList} with topics: ${topics}`);
 
 	let status;
 
@@ -35,23 +45,19 @@ export function subscribe({email, mailingList, deviceId, topics}={}) {
 		'topics': topics
 	})
 	.then(response => {
-		status = response.status;
+		logger.info(`anon-email-api response ${response.status}`);
 
-		logger.info(`anon-email-api response ${status}`);
-		if (status === 403) {
-			return response.json();
-		} else {
-			return Promise.resolve({});
+		if (response.status === 403) {
+			return response.json().then(json => {
+				logger.info(`anon-email-api response body ${JSON.stringify(json)}`);
+				return Promise.reject(json);
+			});
+		} else if(response.status !== 204) {
+			return Promise.reject({});
 		}
 	})
-	.then(data => {
-		logger.info(`anon-email-api response body ${JSON.stringify(data)}`);
-
-		if (status !== 204) {
-			return Promise.reject(data);
-		}
-
-		return {};
+	.then(() => {
+		logSubscription({deviceId, email});
 	});
 };
 
