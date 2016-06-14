@@ -2,11 +2,6 @@
   "name": "@financial-times/newsletter-signup",
   "version": "4.5.0",
   "main": "lib/index.js",
-  "files": [
-    "package.json",
-    "lib",
-    "views"
-  ],
   "scripts": {
     "test": "make test",
     "prepublish": "make"
