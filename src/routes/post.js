@@ -9,7 +9,7 @@ export default function (req, res, next) {
 	const topics = req.body && req.body.topics ? req.body.topics : 'default';
 	const cookies = req.get('cookie') || req.get('ft-cookie-original');
 	const ua = req.get('user-agent');
-	const deviceId = extractDeviceId(cookies);
+	const deviceId = req.body && req.body.deviceId ? req.body.deviceId : extractDeviceId(cookies);
 
 	const spoor = new SpoorClient({
 		source: 'newsletter-signup',
