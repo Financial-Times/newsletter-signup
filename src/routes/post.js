@@ -16,7 +16,8 @@ export default function (req, res, next) {
 		category: 'light-signup',
 		product: req.body && (req.body.product || req.body.source) || null,
 		cookies,
-		ua
+		ua,
+		deviceId
 	});
 
 	validateRequest()
