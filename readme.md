@@ -4,7 +4,7 @@ newsletter-signup
 Endpoints to sign an email address up to the FT newsletter (and unsubscribe)
 
 ```shell
-npm i -S @financial-times/newsletter
+npm i -S @financial-times/newsletter-signup
 ```
 
 Usage
