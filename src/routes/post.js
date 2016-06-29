@@ -7,8 +7,8 @@ export default function (req, res, next) {
 
 	const mailingList = req.body && req.body.mailingList ? req.body.mailingList : 'light-signup';
 	const topics = req.body && req.body.topics ? req.body.topics : 'default';
-	const cookies = req.get('cookie') || req.get('ft-cookie-original');
-	const ua = req.get('user-agent');
+	const cookies = (req.body && req.body.cookie) || req.get('cookie') || req.get('ft-cookie-original');
+	const ua = (req.body && req.body.ua) || req.get('user-agent');
 	const deviceId = req.body && req.body.deviceId ? req.body.deviceId : extractDeviceId(cookies);
 
 	const spoor = new SpoorClient({
