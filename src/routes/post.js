@@ -13,7 +13,10 @@ export default function (req, res, next) {
 	const ua = (req.body && req.body.ua) || req.get('user-agent');
 	const ip = req.ip;
 	const deviceId = req.body && req.body.deviceId ? req.body.deviceId : extractDeviceId(cookies);
-	logger.info(`POST from ${deviceId} with IP ${ip}, headers: ${req.headers}`);
+
+	if(process.env.LOG_HEADERS) {
+		logger.info(`POST from ${deviceId} with IP ${ip}, headers: ${JSON.stringify(req.headers)}`);
+	}
 
 	const spoor = new SpoorClient({
 		source: 'newsletter-signup',
