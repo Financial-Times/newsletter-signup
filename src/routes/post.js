@@ -11,7 +11,7 @@ export default function (req, res, next) {
 	const articleUuid = req.body && req.body.articleUuid ? req.body.articleUuid : null;
 	const cookies = (req.body && req.body.cookie) || req.get('cookie') || req.get('ft-cookie-original');
 	const ua = (req.body && req.body.ua) || req.get('user-agent');
-	const ip = req.ip;
+	const ip = req.get('fastly-client-ip') || req.ip;
 	const deviceId = req.body && req.body.deviceId ? req.body.deviceId : extractDeviceId(cookies);
 
 	if(process.env.LOG_HEADERS) {
