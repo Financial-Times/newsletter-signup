@@ -10,6 +10,7 @@ export default function (req, res, next) {
 	const articleUuid = req.body && req.body.articleUuid ? req.body.articleUuid : null;
 	const cookies = (req.body && req.body.cookie) || req.get('cookie') || req.get('ft-cookie-original');
 	const ua = (req.body && req.body.ua) || req.get('user-agent');
+	const ip = req.ip;
 	const deviceId = req.body && req.body.deviceId ? req.body.deviceId : extractDeviceId(cookies);
 
 	const spoor = new SpoorClient({
@@ -18,6 +19,7 @@ export default function (req, res, next) {
 		product: req.body && (req.body.product || req.body.source) || null,
 		cookies,
 		ua,
+		ip,
 		deviceId
 	});
 
