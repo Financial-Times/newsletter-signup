@@ -5,6 +5,7 @@ import logger from '@financial-times/n-logger';
 
 export default function (req, res, next) {
 
+	const product = req.body && (req.body.product || req.body.source) || null;
 	const mailingList = req.body && req.body.mailingList ? req.body.mailingList : 'light-signup';
 	const topics = req.body && req.body.topics ? req.body.topics : 'default';
 	const articleUuid = req.body && req.body.articleUuid ? req.body.articleUuid : null;
@@ -12,11 +13,12 @@ export default function (req, res, next) {
 	const ua = (req.body && req.body.ua) || req.get('user-agent');
 	const ip = req.ip;
 	const deviceId = req.body && req.body.deviceId ? req.body.deviceId : extractDeviceId(cookies);
+	logger.info(`POST from ${deviceId} with IP ${ip}`);
 
 	const spoor = new SpoorClient({
 		source: 'newsletter-signup',
 		category: 'light-signup',
-		product: req.body && (req.body.product || req.body.source) || null,
+		product,
 		cookies,
 		ua,
 		ip,
