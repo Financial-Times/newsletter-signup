@@ -8,6 +8,7 @@ export default function (req, res, next) {
 	const product = req.body && (req.body.product || req.body.source) || null;
 	const mailingList = req.body && req.body.mailingList ? req.body.mailingList : 'light-signup';
 	const topics = req.body && req.body.topics ? req.body.topics : 'default';
+	const following = (req.body && req.body.following) || null;
 	const articleUuid = req.body && req.body.articleUuid ? req.body.articleUuid : null;
 	const cookies = (req.body && req.body.cookie) || req.get('cookie') || req.get('ft-cookie-original');
 	const ua = (req.body && req.body.ua) || req.get('user-agent');
@@ -63,7 +64,8 @@ export default function (req, res, next) {
 			action: 'subscribed',
 			context: {
 				list: mailingList,
-				topics: topics,
+				topics,
+				following,
 				content: {
 					uuid: articleUuid,
 				}
@@ -79,8 +81,9 @@ export default function (req, res, next) {
 	function subscribeToMailingList () {
 		return subscribe({
 			email: req.body.email,
-			mailingList: mailingList,
-			topics: topics,
+			mailingList,
+			topics,
+			following,
 			deviceId,
 		})
 		.catch(error => {

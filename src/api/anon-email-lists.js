@@ -33,17 +33,22 @@ function logSubscription({deviceId, email}) {
 	})).catch(e => logger.warn(e));
 }
 
-export function subscribe({email, mailingList, deviceId, topics}={}) {
-	logger.info(`anon-email-api about to subscribe user (device ${deviceId}) to ${mailingList} with topics: ${topics}`);
+export function subscribe({ email, mailingList, deviceId, topics, following } = { }) {
+	logger.info('anon-email-api about to subscribe user', { device_id: deviceId, mailing_list: mailingList, topics, following });
 
 	let status;
+	const data = {
+		mailingListName: mailingList,
+		userEmail: email,
+		deviceId
+	};
+	if (following) {
+		data.following = following;
+	} else {
+		data.topics = topics;
+	}
 
-	return call('/mailingList/subscribe', {
-		'mailingListName': mailingList,
-		'deviceId': deviceId,
-		'userEmail': email,
-		'topics': topics
-	})
+	return call('/mailingList/subscribe', data)
 	.then(response => {
 		logger.info(`anon-email-api response ${response.status}`);
 
