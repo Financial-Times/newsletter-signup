@@ -60,17 +60,18 @@ export default function (req, res, next) {
 	}
 
 	function silentlySubmitTrackingEvent () {
-		spoor.submit({
-			action: 'subscribed',
-			context: {
-				list: mailingList,
-				topics,
-				following,
-				content: {
-					uuid: articleUuid,
-				}
+		const context = {
+			list: mailingList,
+			content: {
+				uuid: articleUuid,
 			}
-		});
+		};
+		if (following) {
+			context.following = following;
+		} else {
+			context.topics = topics;
+		}
+		spoor.submit({ action: 'subscribed', context });
 	}
 
 	function extractDeviceId (cookie) {
@@ -98,7 +99,7 @@ export default function (req, res, next) {
 	}
 
 	function sendStatus(response) {
-		logger.info(`final status for ${deviceId} is ${response}`);
+		logger.info(`final status is ${response}`, { deviceId });
 
 		if(req.newsletterSignupPostNoResponse) {
 			res.locals.newsletterSignupStatus = response;
