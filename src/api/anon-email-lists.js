@@ -45,7 +45,10 @@ export function subscribe({ email, mailingList, deviceId, topics, following } = 
 	} else {
 		data.topics = topics;
 	}
-	logger.info('anon-email-api about to subscribe user', data);
+	// remove sensitive data when logging
+	const loggingData = Object.assign({}, data);
+	delete loggingData.userEmail;
+	logger.info('anon-email-api about to subscribe user', loggingData);
 
 	return call('/mailingList/subscribe', data)
 	.then(response => {
