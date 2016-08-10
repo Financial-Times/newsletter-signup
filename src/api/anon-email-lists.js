@@ -25,7 +25,7 @@ function logSubscription({deviceId, email}) {
 	// don't wait on this promise, log in the background
 	call(`/user/${email}`, null, 'GET').then(r => r.json().then(json => {
 		if(r.ok) {
-			logger.info(`anon-email-api subscribed user (device ${deviceId}) as ${json.uuid}`)
+			logger.info(`anon-email-api subscribed user as ${json.uuid}`, { deviceId })
 		} else {
 			const err = new Error(JSON.stringify(json));
 			err.response = r;
@@ -33,17 +33,24 @@ function logSubscription({deviceId, email}) {
 	})).catch(e => logger.warn(e));
 }
 
-export function subscribe({email, mailingList, deviceId, topics}={}) {
-	logger.info(`anon-email-api about to subscribe user (device ${deviceId}) to ${mailingList} with topics: ${topics}`);
-
+export function subscribe({ email, mailingList, deviceId, topics, following } = { }) {
 	let status;
+	const data = {
+		mailingListName: mailingList,
+		userEmail: email,
+		deviceId
+	};
+	if (following) {
+		data.following = following;
+	} else {
+		data.topics = topics;
+	}
+	// remove sensitive data when logging
+	const loggingData = Object.assign({}, data);
+	delete loggingData.userEmail;
+	logger.info('anon-email-api about to subscribe user', loggingData);
 
-	return call('/mailingList/subscribe', {
-		'mailingListName': mailingList,
-		'deviceId': deviceId,
-		'userEmail': email,
-		'topics': topics
-	})
+	return call('/mailingList/subscribe', data)
 	.then(response => {
 		logger.info(`anon-email-api response ${response.status}`);
 
