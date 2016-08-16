@@ -1,6 +1,8 @@
-import { subscribe } from '../libs/subscribe';
+import logger from '@financial-times/n-logger';
 
-const sendStatus = (req, res, next, response) => {
+import subscribe from '../libs/subscribe';
+
+const sendStatus = (req, res, next, response, deviceId) => {
 	logger.info(`Final status is ${response}`, { deviceId });
 	if (req.newsletterSignupPostNoResponse) {
 		res.locals.newsletterSignupStatus = response;
@@ -14,10 +16,10 @@ export default (req, res, next) => {
 	const sendRouteStatus = sendStatus.bind(null, req, res, next);
 
 	return subscribe(req)
-		.then(() => sendRouteStatus('SUBSCRIPTION_SUCCESSFUL'))
+		.then(({ deviceId } = { }) => sendRouteStatus('SUBSCRIPTION_SUCCESSFUL', deviceId))
 		.catch(error => {
 			if (error.reason) {
-				return sendRouteStatus(error.reason)
+				return sendRouteStatus(error.reason, error.deviceId)
 			}
 			next(new Error(error));
 		});
