@@ -15,7 +15,6 @@ const validateRequest = (email, { product, source, deviceId } = {}) => {
 	return new Promise((resolve, reject) => {
 		if (email && (product || source)) {
 			if (validateEmailAddress(email)) {
-				console.log('##### VALID');
 				resolve({ });
 			} else {
 				reject({ reason: 'INVALID_EMAIL', deviceId });
@@ -57,16 +56,17 @@ const sendEmailAfter5am = email => {
 };
 
 export default req => {
+	const ip = req.get('fastly-client-ip') || req.ip;
+	const cookies = req.body.cookie || req.get('cookie') || req.get('ft-cookie-original');
 	const defaultParams = {
 		mailingList: 'light-signup',
 		topics: 'default',
-		cookies: req.get('cookie') || req.get('ft-cookie-original'),
 		ua: req.get('user-agent'),
-		deviceId: extractDeviceId(cookies),
+		deviceId: extractDeviceId(cookies)
 	};
-	const { email, mailingList, topics, following, deviceId, product, source, cookies, ua, articleUuid } =
+
+	const { email, mailingList, topics, following, deviceId, product, source, ua, articleUuid } =
 		Object.assign({}, defaultParams, req.body);
-	const ip = req.get('fastly-client-ip') || req.ip;
 
 	if (process.env.LOG_HEADERS) {
 		logger.info('Subscribing...', Object.assign({}, req.headers, { deviceId, ip}));
