@@ -49,8 +49,8 @@ const silentlySubmitTrackingEvent = ({ product, source, cookies, ua, ip, deviceI
 	spoor.submit({ action: 'subscribed', context });
 };
 
-const sendEmailAfter5am = email => {
-	if ((new Date()).getHours() >= 5) {
+const sendEmailAfter5am = (email, { sendImmediately = true } = { }) => {
+	if (sendImmediately && (new Date()).getHours() >= 5) {
 		send(email)
 	};
 };
@@ -62,10 +62,11 @@ export default req => {
 		mailingList: 'light-signup',
 		topics: 'default',
 		ua: req.get('user-agent'),
-		deviceId: extractDeviceId(cookies)
+		deviceId: extractDeviceId(cookies),
+		sendImmediately: true
 	};
 
-	const { email, mailingList, topics, following, deviceId, product, source, ua, articleUuid } =
+	const { email, mailingList, topics, following, deviceId, product, source, ua, articleUuid, sendImmediately } =
 		Object.assign({}, defaultParams, req.body);
 
 	if (process.env.LOG_HEADERS) {
@@ -75,6 +76,6 @@ export default req => {
 	return validateRequest(email, { product, source, deviceId })
 		.then(subscribe.bind(null, { email, mailingList, topics, following, deviceId }))
 		.then(silentlySubmitTrackingEvent.bind(null, { product, cookies, ua, ip, deviceId, mailingList, articleUuid, following, topics }))
-		.then(sendEmailAfter5am.bind(null, email, { product, source }))
+		.then(sendEmailAfter5am.bind(null, email, { sendImmediately }))
 		.then(() => ({ deviceId }));
 };
