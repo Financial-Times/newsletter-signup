@@ -49,8 +49,8 @@ const silentlySubmitTrackingEvent = ({ product, source, cookies, ua, ip, deviceI
 	spoor.submit({ action: 'subscribed', context });
 };
 
-const sendEmailAfter5am = (email, { sendImmediately = true } = { }) => {
-	if (sendImmediately && (new Date()).getHours() >= 5) {
+const sendEmailAfter5am = (email, { sendImmediately = 'true' } = { }) => {
+	if (sendImmediately === 'true' && (new Date()).getHours() >= 5) {
 		send(email)
 	};
 };
@@ -63,7 +63,7 @@ export default req => {
 		topics: 'default',
 		ua: req.get('user-agent'),
 		deviceId: extractDeviceId(cookies),
-		sendImmediately: true
+		sendImmediately: 'true'
 	};
 
 	const { email, mailingList, topics, following, deviceId, product, source, ua, articleUuid, sendImmediately } =
