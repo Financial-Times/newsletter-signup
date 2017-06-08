@@ -1,6 +1,12 @@
 newsletter-signup
 =================
 
+#### :warning: deprecated
+**This feature (aka. light signup / email only signup) has been deprecated and is no longer in use. Please consult the #ft-next-conversion team.**
+
+----
+
+
 Endpoints to sign an email address up to the FT newsletter (and unsubscribe)
 
 ```shell
